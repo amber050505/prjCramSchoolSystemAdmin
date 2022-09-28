@@ -1,0 +1,625 @@
+﻿@model prjCramSchoolSystemAdmin.ViewModel.CCourseModelAllViewModel
+
+@{
+    if (Model.c_model == null)
+    {
+        ViewData["Title"] = "新增課程模板";
+    }
+    else
+    {
+        ViewData["Title"] = Model.c_model.FName;
+    }
+
+}
+@section Styles{
+    <style>
+        #btnSave {
+            position: fixed; /*固定在網頁上不隨卷軸移動，若要隨卷軸移動用absolute*/
+            top: 85%; /*設置垂直位置*/
+            right: 210px; /*設置水平位置，依所放的內容多寡需要自行手動調整*/
+            border: 3px dodgerblue solid;
+            border-radius: 50%;
+        }
+
+        .flex-container {
+            display: flex;
+            /*height: 300px;
+            padding: 10px;*/
+            /*background-color: #526E89;*/
+            flex-direction: row;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .checkout__input__ {
+            margin-bottom: 6px;
+        }
+
+            .checkout__input__ p {
+                color: #444444;
+                font-weight: 500;
+                margin-bottom: 12px;
+            }
+
+            .checkout__input__ input {
+                height: 50px;
+                width: 100%;
+                border: 1px solid #e1e1e1;
+                font-size: 14px;
+                color: #666666;
+                padding-left: 20px;
+                margin-bottom: 20px;
+            }
+
+        .tdCount {
+            display: none;
+        }
+
+        .tdCourseNumber {
+            width: 80px;
+        }
+
+            .tdCourseNumber input {
+                width: 60px;
+            }
+
+        .tdCourseNumber {
+            width: 80px;
+        }
+
+            .tdCourseNumber input {
+                /*width: 60px;*/
+            }
+        .MakeWide {
+            width: 100%;
+        }
+    </style>
+}
+
+<!-- Breadcrumb Begin -->
+<div class="breadcrumb-option">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-6 col-md-6 col-sm-6">
+                <div class="breadcrumb__text">
+                    <h2>課程模板詳情</h2>
+                </div>
+            </div>
+            <div class="col-lg-6 col-md-6 col-sm-6">
+                <div class="breadcrumb__links">
+                    <a href="@Url.Content("~/")">首頁</a>
+                    <a href="@Url.Content("~/CourseModel/List")">課程模板</a>
+                    <span>模板詳情</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Breadcrumb End -->
+<!-- Checkout Section Begin -->
+<form name="coursemodel" class="checkout spad" asp-action="Edit" style="padding-top:0px;margin-top:10px;">
+    <div class="container product__details__tab">
+        <div class="col-lg-12">
+            <ul class="nav nav-tabs" role="tablist">
+                <li class="nav-item">
+                    <a class="nav-link active" data-toggle="tab" href="#tabs-1" role="tab">課程模板</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-toggle="tab" href="#tabs-2" role="tab">課程模板細項</a>
+                </li>
+            </ul>
+            <div class="tab-content">
+                <div class="tab-pane active" id="tabs-1" role="tabpanel">
+                    <div class="container-fluid">
+                        <div class="checkout__form">
+                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                            <div class="row justify-content-center">
+                                <div class="container">
+                                    @*col-lg-8 col-md-10*@
+                                    <input id="txtCourseId" type="hidden" asp-for="@Model.c_model.FCourseId" class="form-control" />
+                                    <input type="hidden" asp-for="@Model.c_model.FModleSate" class="form-control" />
+                                    @*@Html.DropDownListFor(model => model.c_model.FCategory, (IEnumerable<SelectListItem>)ViewBag.CategoryDropDown, new { @class = "form-control" })*@
+                                    <div class="row">
+                                        <div class="col-lg-2">
+                                            <div class="checkout__input">
+                                                @*<p><label asp-for="@Model.c_model.FCategory" class="control-label" style="margin-right: 5px"></label><span>*</span></p>*@
+                                                <p style="text-align: left">@Html.DisplayNameFor(model => model.c_model.FCategory)<span>*</span></p>
+                                                @Html.DropDownListFor(model => model.c_model.FCategory, (IEnumerable<SelectListItem>)Model.CategoryDDL, new { @class = "form-control MakeWide", id = "txtCategory" })
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-4">
+                                            <div class="checkout__input">
+                                                <p style="text-align: left"><label asp-for="@Model.c_model.FName" class="control-label" style="margin-right: 5px"></label><span>*</span></p>
+                                                <input asp-for="@Model.c_model.FName" class="form-control" />
+                                                <span asp-validation-for="@Model.c_model.FName" class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-3">
+                                            <div class="checkout__input">
+                                                <p style="text-align: left"><label asp-for="@Model.c_model.FTotalHours" class="control-label" style="margin-right: 5px"></label><span>*</span></p>
+                                                <input asp-for="@Model.c_model.FTotalHours" class="form-control" />
+                                                <span asp-validation-for="@Model.c_model.FTotalHours" class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-3">
+                                            <div class="checkout__input">
+                                                <p style="text-align: left"><label asp-for="@Model.c_model.FTotalNumber" class="control-label" style="margin-right: 5px"></label><span>*</span></p>
+                                                <input asp-for="@Model.c_model.FTotalNumber" class="form-control" />
+                                                <span asp-validation-for="@Model.c_model.FTotalNumber" class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-lg-4">
+                                            <div class="checkout__input">
+                                                <p style="text-align: left"><label asp-for="@Model.c_model.FGrade" class="control-label" style="margin-right: 5px"></label><span>*</span></p>
+                                                <input asp-for="@Model.c_model.FGrade" class="form-control" />
+                                                <span asp-validation-for="@Model.c_model.FGrade" class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-2">
+                                            <div class="checkout__input">
+                                                <p style="text-align: left"><label asp-for="@Model.c_model.FSchoolYear" class="control-label" style="margin-right: 5px"></label><span>*</span></p>
+                                                @Html.DropDownListFor(model => model.c_model.FSchoolYear, (IEnumerable<SelectListItem>)Model.SchoolYearDDL, new { @class = "form-contrl MakeWide" })
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-3">
+                                            <div class="checkout__input">
+                                                <p style="text-align: left"><label asp-for="@Model.c_model.FOriginalPrice" class="control-label" style="margin-right: 5px"></label><span>*</span></p>
+                                                <input asp-for="@Model.c_model.FOriginalPrice" class="form-control" />
+                                                <span asp-validation-for="@Model.c_model.FOriginalPrice" class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-3">
+                                            <div class="checkout__input">
+                                                <p style="text-align: left"><label asp-for="@Model.c_model.FSpecialOffer" class="control-label" style="margin-right: 5px"></label><span>*</span></p>
+                                                <input asp-for="@Model.c_model.FSpecialOffer" class="form-control" />
+                                                <span asp-validation-for="@Model.c_model.FSpecialOffer" class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-lg-12 checkout__input">
+                                            <p style="text-align: left"><label asp-for="@Model.c_model.FSummary" class="control-label"></label><span>*</span></p>
+                                            <textarea asp-for="@Model.c_model.FSummary" class="form-control" style="height: 96px; line-height: 16px;resize:none;"></textarea>
+                                            <span asp-validation-for="@Model.c_model.FSummary" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            <div class="tab-pane" id="tabs-2" role="tabpanel">
+                <div class="cart__total">
+                    <h6>加入課程模板細項</h6>
+                    <div class="flex-container" style="padding-top:0px;">
+                        <div class="col-lg-4 checkout__input__">
+                            <label class="control-label" style="margin-right: 5px">課堂數</label>
+                            <input id="txtCDetail_CourseNumber" type="text">
+                        </div>
+                        <div class="col-lg-4 checkout__input__">
+                            <label class="control-label" style="margin-right: 5px">課堂進度(頁數或章節)</label>
+                            <input id="txtCDetail_Schedule" type="text">
+                        </div>
+                        <div class="col-lg-4 checkout__input__">
+                            <label class="control-label" style="margin-right: 5px">授課方式</label>
+                            <input id="txtCDetail_TeachingMethod" type="text">
+                        </div>
+                        <div class="col-lg-6 checkout__input__">
+                            <label class="control-label" style="margin-right: 5px">課堂進度說明</label>
+                            <input id="txtCDetail_ScheduleDetail" type="text">
+                        </div>
+                        <div class="col-lg-6 checkout__input__">
+                            <label class="control-label" style="margin-right: 5px">授課備註</label>
+                            <input id="txtCDetail_Remark" type="text">
+                        </div>
+                    </div>
+                    @*<input type="button" id="btnAddDetail" value="addDetail" />*@
+                    <button type="button" id="btnAddDetail" style="float: right;margin-right:20px; border: 2px solid #b7b7b7; background: transparent; color: #111111; "><i class="fa-solid fa-plus"></i>加入</button>
+                </div>
+                @*晚點用*@
+                @*<input id="tabQuantity" type="hidden" asp-for="@Model.c_model_detail_list.Count"/>*@
+                <table class="table">
+                    <thead>
+                        <tr>
+                            @*<th>@Html.DisplayNameFor(model => model.c_model_detail.FCourseId)</th>*@
+                            <th style="display:none;">序號</th>
+                            <th style="width: 80px; text-align: center;">@Html.DisplayNameFor(model => model.c_model_detail.FCourseNumber)</th>
+                            <th style="width: 260px; text-align: center;">@Html.DisplayNameFor(model => model.c_model_detail.FSchedule)</th>
+                            <th style="width: 260px; text-align: center;">@Html.DisplayNameFor(model => model.c_model_detail.FScheduleDetail)</th>
+                            <th style="width: 260px; text-align: center;">@Html.DisplayNameFor(model => model.c_model_detail.FTeachingMethod)</th>
+                            <th style="width: 260px; text-align: center; ">@Html.DisplayNameFor(model => model.c_model_detail.FRemark)</th>
+                            <th></th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody id="detailtbody">
+                        @{
+                            if (Model.c_model_detail_list != null)
+                            {
+
+                                int count = 0;
+                                for (int i = 0; i < Model.c_model_detail_list.Count; i++)
+                                {
+                                    count++;
+                                    <tr>
+                                        @*<td>@Html.EditorFor(modelItem => Model.c_model_detail_list[i].FCourseId)</td>*@
+                                        <td class="tdCount">@count</td>
+                                        <td class="tdCourseNumber"><input type="text" asp-for="@Model.c_model_detail_list[i].FCourseNumber" disabled="disabled" style=" width: 100%; height: 100%; object-fit: cover;" /></td>
+                                        <td class="tdCourseNumber"><input type="text" asp-for="@Model.c_model_detail_list[i].FSchedule" disabled="disabled" style=" width: 100%; height: 100%; object-fit: cover;" /></td>
+                                        <td class="tdCourseNumber"><input type="text" asp-for="@Model.c_model_detail_list[i].FScheduleDetail" disabled="disabled" style=" width: 100%; height: 100%; object-fit: cover;" /></td>
+                                        <td class="tdCourseNumber"><input type="text" asp-for="@Model.c_model_detail_list[i].FTeachingMethod" disabled="disabled" style=" width: 100%; height: 100%; object-fit: cover;" /></td>
+                                        <td class="tdCourseNumber"><input type="text" asp-for="@Model.c_model_detail_list[i].FRemark" disabled="disabled" style=" width: 100%; height: 100%; object-fit: cover;" /></td>
+                                        <td class="tdSave" style="display:none;"><button type="button" class="btnSave" style="border: 2px blue none;"><i class="fa-solid fa-check"></i></button></td>
+                                        <td class="tdEdit"><button type="button" class="btnEdit" style="border: 2px blue none;"><i class="fa-solid fa-pen-to-square"></i></button></td>
+                                        <td class="tdDelete"><button type="button" class="btnDelete" style="border: 2px blue none;"><i class="fa-solid fa-eraser"></i></button></td>
+                                    </tr>
+                                }
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="form-group" style="text-align:right;padding-right:195px;">
+            @*<input type="submit" value="Create" class="btn btn-primary" id="submit" />*@
+            <button class="btn btn-default" type="button" id="btnSave">
+                <i class="fa-regular fa-floppy-disk" style="padding:5px; font-size:35px;"></i>
+            </button>
+        </div>
+
+    </div>
+</div>
+</form>
+
+<!-- Checkout Section End -->
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script>
+        readDetail();
+        //點擊shift鍵
+        $(document).keyup(function (e) {
+            if (e.keyCode == 16) {
+                $("#c_model_FName").val("國三上社會段考複習");
+                $("#c_model_FTotalHours").val("3");
+                $("#c_model_FTotalNumber").val("3");
+                $("#c_model_FGrade").val("國中三年級");
+                $("#c_model_FOriginalPrice").val("1500");
+                $("#c_model_FSpecialOffer").val("1000");
+                $("#c_model_FSummary").val("由艾登登補習班精心教學，內容幽默有趣！完整複習「章節範圍課程」及「觀念邏輯整合」，幫助學生加強課堂記憶，把握必考觀念。");
+            }
+            //點擊A鍵
+            if (e.keyCode == 65) {
+                $("#txtCDetail_CourseNumber").val("1");
+                $("#txtCDetail_Schedule").val("【公民】Ch3-4");
+                $("#txtCDetail_TeachingMethod").val("課本講解");
+                $("#txtCDetail_ScheduleDetail").val("家庭生活/平權家庭");
+                $("#txtCDetail_Remark").val("公民第3-4章隨堂考測驗");
+            }
+            //點擊S鍵
+            if (e.keyCode == 83) {
+                $("#txtCDetail_CourseNumber").val("2");
+                $("#txtCDetail_Schedule").val("【歷史】Ch3-4");
+                $("#txtCDetail_TeachingMethod").val("課本講解");
+                $("#txtCDetail_ScheduleDetail").val("清領時期的政治政策變遷");
+                $("#txtCDetail_Remark").val("歷史第3-4章隨堂考測驗");
+            }
+            //點擊D鍵
+            if (e.keyCode == 68) {
+                $("#txtCDetail_CourseNumber").val("3");
+                $("#txtCDetail_Schedule").val("【地理】Ch3-4");
+                $("#txtCDetail_TeachingMethod").val("課本講解");
+                $("#txtCDetail_ScheduleDetail").val("地形篇/海岸與島嶼篇");
+                $("#txtCDetail_Remark").val("地理第3-4章隨堂考測驗");
+            }
+        })
+
+        function readDetail() {
+            let FOriginalPrice = $("#c_model_FOriginalPrice").val();
+            let p1 = FOriginalPrice.indexOf(".")
+            if (p1 != -1) {
+                $("#c_model_FOriginalPrice").val(FOriginalPrice.substring(0, p1));
+            }
+            let FSpecialOffer = $("#c_model_FSpecialOffer").val();
+            let p2 = FSpecialOffer.indexOf(".")
+            if (p2 != -1) {
+                $("#c_model_FSpecialOffer").val(FSpecialOffer.substring(0, p2));
+            }
+
+            //一開始先將資料放進session裡
+            let length = $("tbody").find("tr").length;
+            let count = document.getElementsByClassName("tdCount")
+            let arrDetail = []
+            for (let i = 0; i < length; i++) {
+                let _count = $("#detailtbody").find("tr").eq(i).find(".tdCount").eq(0).html();
+                let _countnum = parseInt(_count);
+                console.log(_countnum)
+
+                let CourseNumber = $(`#c_model_detail_list_${i}__FCourseNumber`).val();
+                let Schedule = $(`#c_model_detail_list_${i}__FSchedule`).val();
+                let TeachingMethod = $(`#c_model_detail_list_${i}__FTeachingMethod`).val();
+                let ScheduleDetail = $(`#c_model_detail_list_${i}__FScheduleDetail`).val();
+                let Remark = $(`#c_model_detail_list_${i}__FRemark`).val();
+
+                let objDetail = {
+                    _Count: parseInt(_countnum),
+                    FCourseNumber: parseInt(CourseNumber),
+                    FSchedule: Schedule,
+                    FScheduleDetail: ScheduleDetail,
+                    FTeachingMethod: TeachingMethod,
+                    FRemark: Remark
+                }
+                arrDetail.push(objDetail)
+            }
+            console.log(arrDetail)
+            sessionStorage.setItem("detailList", JSON.stringify(arrDetail));
+        }
+
+        //編輯
+        $("table").on("click", ".btnEdit", function (e) {
+            //隱藏目前tr的編輯按鈕
+            let click_btn = $(e.target);
+            click_btn.attr("style", `display:none;`);
+            //取得目前tr
+            let row = click_btn.closest("tr");
+            //取得目前tr是第幾行
+            let col = row.index() + 1;
+            //隱藏其他tr的編輯和刪除按鈕
+            let total_tr = $("#detailtbody tr");
+            for (let i = 0; i < total_tr.length; i++) {
+                if (i == col - 1)
+                    continue;
+                let new_row = total_tr[i];
+                btn_edit = $(new_row).find(".tdEdit").eq(0).find(".btnEdit").eq(0);
+                btn_edit.attr("style", `display:none;`);
+                btn_delete = $(new_row).find(".tdDelete").eq(0).find(".btnDelete").eq(0);
+                btn_delete.attr("style", `display:none;`);
+            }
+            //隱藏目前tr的刪除按鈕
+            let btndelete = row.find(".tdDelete").eq(0);
+            btndelete.attr("style", `display:none;`);
+            //開啟編輯後存檔按鈕
+            let btnsave = row.find(".tdSave").eq(0);
+            btnsave.attr("style", `display:block;`);
+            //打開目前tr編輯input type=text
+            for (let i = 0; i < row.find("td").length; i++) {
+                let td = row.find("td").eq(i).find(":text").eq(0);
+                if (td.attr("disabled") == "disabled")
+                    td.removeAttr("disabled")
+            }
+        })
+
+        //編輯存檔
+        $("tbody").on("click", ".btnSave", function (e) {
+            let arrDetail = JSON.parse(sessionStorage.getItem("detailList"));
+            console.log(arrDetail);
+            //取得目前tr
+            let td = $(e.target).closest("tr")
+
+            let _Count = td.find(".tdCount").eq(0).html();
+            console.log(_Count);
+            let _CourseNumber = td.find("td").eq(1).find(":text").eq(0).val();
+            console.log(_CourseNumber);
+            let _Schedule = td.find("td").eq(2).find(":text").eq(0).val();
+            console.log(_Schedule);
+            let _ScheduleDetail = td.find("td").eq(3).find(":text").eq(0).val();
+            console.log(_ScheduleDetail);
+            let _TeachingMethod = td.find("td").eq(4).find(":text").eq(0).val();
+            console.log(_TeachingMethod);
+            let _Remark = td.find("td").eq(5).find(":text").eq(0).val();
+            console.log(_Remark);
+
+            for (let i = 0; i < arrDetail.length; i++) {
+                if (arrDetail[i]._Count == _Count) {
+                    arrDetail[i].FCourseNumber = parseInt(_CourseNumber);
+                    arrDetail[i].FSchedule = _Schedule;
+                    arrDetail[i].FScheduleDetail = _ScheduleDetail;
+                    arrDetail[i].FTeachingMethod = _TeachingMethod;
+                    arrDetail[i].FRemark = _Remark;
+                }
+            }
+            sessionStorage.setItem("detailList", JSON.stringify(arrDetail));
+            refteshDetail(arrDetail);
+        })
+
+        //刪除
+        $("tbody").on("click", ".btnDelete", function (e) {
+            let row = $(e.target).closest("tr");
+            console.log(row);
+            let count_id = $(row).find(".tdCount").eq(0).html();
+            console.log(count_id)
+            let arrDetail = JSON.parse(sessionStorage.getItem("detailList"));
+            console.log(arrDetail);
+            arrDetail = arrDetail.filter(function (item) {
+                return item._Count != count_id;
+            })
+            console.log(arrDetail);
+            sessionStorage.setItem("detailList", JSON.stringify(arrDetail));
+            refteshDetail(arrDetail);
+        })
+
+        let refteshDetail = function (arr) {
+
+            let docFrag = $(document.createDocumentFragment());
+            $.each(arr, function (idx, data) {
+                let { _Count, FCourseNumber, FSchedule, FScheduleDetail, FTeachingMethod, FRemark } = data;
+                //放進列表
+                //const cell1 = $(`<td"></td>`).text(_Count).addClass("tdCount");
+                const cell1 = $(`<td></td>`).text(_Count).addClass("tdCount");
+                const cell2 = $(document.createElement("input")).attr({ "value": FCourseNumber, "disabled": "disabled" });
+                const cell3 = $(`<input></input>`).attr({ "value": FSchedule, "disabled": "disabled" });
+                const cell4 = $(`<input></input>`).attr({ "value": FScheduleDetail, "disabled": "disabled" });
+                const cell5 = $(`<input></input>`).attr({ "value": FTeachingMethod, "disabled": "disabled" });
+                const cell6 = $(`<input></input>`).attr({ "value": FRemark, "disabled": "disabled" });
+                //加入按鈕
+                const save_icon = $("<i></i>").addClass("fa-solid fa-check")
+                let btn_save = $("<button></button>").attr("type", "button").addClass("btnSave").attr("style", `border: 2px blue none;`).append(save_icon);
+                const edit_icon = $("<i></i>").addClass("fa-solid fa-pen-to-square")
+                let btn_edit = $("<button></button>").attr("type", "button").addClass("btnEdit").attr("style", `border: 2px blue none;`).append(edit_icon);
+                const delete_icon = $("<i></i>").addClass("fa-solid fa-eraser")
+                let btn_delete = $("<button></button>").attr("type", "button").addClass("btnDelete").attr("style", `border: 2px blue none;`).append(delete_icon);
+
+                const td2 = $(`<td></td>`).addClass("tdCourseNumber").append(cell2);
+                const td3 = $("<td></td>").addClass("tdSchedule").append(cell3);
+                const td4 = $("<td></td>").addClass("tdScheduleDetail").append(cell4);
+                const td5 = $("<td></td>").addClass("tdTeachingMethod").append(cell5);
+                const td6 = $("<td></td>").addClass("tdRemark").append(cell6);
+                const td7 = $("<td></td>").addClass("tdSave").attr("style", `display:none;`).append(btn_save);
+                const td8 = $("<td></td>").addClass("tdEdit").append(btn_edit);
+                const td9 = $("<td></td>").addClass("tdDelete").append(btn_delete);
+                const row = $("<tr></tr>").append([cell1, td2, td3, td4, td5, td6, td7, td8, td9]);
+                docFrag.append(row);
+            })
+            $("#detailtbody").html(docFrag);
+        }
+
+        //清空細項列表欄位
+        let clearDetail = function () {
+            $("#txtCDetail_CourseNumber").val("");
+            $("#txtCDetail_Schedule").val("");
+            $("#txtCDetail_TeachingMethod").val("");
+            $("#txtCDetail_ScheduleDetail").val("");
+            $("#txtCDetail_Remark").val("");
+        }
+
+        //新增
+        $("#btnAddDetail").click(function () {
+            //讀session
+            let arrDetail = JSON.parse(sessionStorage.getItem("detailList"));
+            //序號
+            const length = $("tbody").find("tr").length;
+            let count = "0";
+            if (length != 0) {
+                count = document.querySelectorAll(".tdCount")[length - 1].innerHTML;
+            }
+            //加入資料
+            const CourseNumber = document.getElementById("txtCDetail_CourseNumber").value;
+            const Schedule = document.getElementById("txtCDetail_Schedule").value;
+            const TeachingMethod = document.getElementById("txtCDetail_TeachingMethod").value;
+            const ScheduleDetail = document.getElementById("txtCDetail_ScheduleDetail").value;
+            const Remark = document.getElementById("txtCDetail_Remark").value;
+
+            //加入session
+            let newDetail = {
+                _Count: parseInt(count) + 1,
+                FCourseNumber: parseInt(CourseNumber),
+                FSchedule: Schedule,
+                FScheduleDetail: ScheduleDetail,
+                FTeachingMethod: TeachingMethod,
+                FRemark: Remark
+            }
+            arrDetail.push(newDetail);
+            sessionStorage.setItem("detailList", JSON.stringify(arrDetail));
+
+            refteshDetail(arrDetail);
+            clearDetail();
+            ////放進列表
+            //const cell1 = $(`<td"></td>`).text(parseInt(count) + 1).addClass("tdCount");
+            //const cell2 = $(document.createElement("input")).attr({ "value": CourseNumber, "disabled": "disabled" });
+            //const cell3 = $(`<input></input>`).attr({ "value": Schedule, "disabled": "disabled"});
+            //const cell4 = $(`<input></input>`).attr({ "value": ScheduleDetail, "disabled": "disabled" });
+            //const cell5 = $("<input></input>").attr({ "value": TeachingMethod, "disabled": "disabled" });
+            //const cell6 = $("<input></input>").attr({ "value": Remark, "disabled": "disabled" });
+            ////加入按鈕
+            //const save_icon = $("<i></i>").addClass("fa-solid fa-check")
+            //let btn_save = $("<button></button>").addClass("btnSave").attr("style", `border: 2px blue none;`).append(save_icon);
+            //const edit_icon = $("<i></i>").addClass("fa-solid fa-pen-to-square")
+            //let btn_edit = $("<button></button>").addClass("btnEdit").attr("style", `border: 2px blue none;`).append(edit_icon);
+            //const delete_icon = $("<i></i>").addClass("fa-solid fa-eraser")
+            //let btn_delete = $("<button></button>").addClass("btnDelete").attr("style", `border: 2px blue none;`).append(delete_icon);
+
+            //const td2 = $(`<td></td>`).addClass("tdCourseNumber").append(cell2);
+            //const td3 = $("<td></td>").addClass("tdSchedule").append(cell3);
+            //const td4 = $("<td></td>").addClass("tdScheduleDetail").append(cell4);
+            //const td5 = $("<td></td>").addClass("tdTeachingMethod").append(cell5);
+            //const td6 = $("<td></td>").addClass("tdRemark").append(cell6);
+            //const td7 = $("<td></td>").addClass("tdSave").attr("style", `display:none;`).append(btn_save);
+            //const td8 = $("<td></td>").addClass("tdEdit").append(btn_edit);
+            //const td9 = $("<td></td>").addClass("tdDelete").append(btn_delete);
+            //const row = $("<tr></tr>").append([cell1, td2, td3, td4, td5, td6, td7, td8, td9]);
+
+            //$('#detailtbody').append(row);
+        })
+
+        $("#btnSave").click(async function () {
+            let arrDetail = sessionStorage.getItem("detailList");
+            console.log(arrDetail)
+            let formData = new FormData(document.coursemodel);
+            formData.append("arrDetail", arrDetail);
+            let response = await fetch("@Url.Content("~/CourseModel/Edit")", { method: "POST", body: formData });
+            if (response.status == 200) {
+                window.location.href = "@Url.Content("~/CourseModel/List")"
+            }
+        //    let arrDetail = JSON.parse(sessionStorage.getItem("detailList"));
+
+        //    const docFrag = $(document.createDocumentFragment());
+        //    let num = 0;
+        //    console.log(arrDetail)
+        //    $.each(arrDetail, function (idx, arr) {
+        //        const { _Count, FCourseNumber, FSchedule, FScheduleDetail, FTeachingMethod, FRemark } = arr;
+        //        const cell1 = $(`<td"></td>`).text(_Count);
+        //        //const cell2 = $("<input></input>").attr({ name: `c_model_detail_list[${num}].FCourseNumber`, value: FCourseNumber });
+        //        const cell2 = $("<input></input>").attr({ name: `c_model_detail_list[${num}].FCourseNumber`, value: FCourseNumber });
+        //        const cell3 = $("<input></input>").attr({ name: `c_model_detail_list[${num}].FSchedule`, value: FSchedule });
+        //        const cell4 = $("<input></input>").attr({ name: `c_model_detail_list[${num}].FScheduleDetail`, value: FScheduleDetail });
+        //        const cell5 = $("<input></input>").attr({ name: `c_model_detail_list[${num}].FTeachingMethod`, value: FTeachingMethod });
+        //        const cell6 = $("<input></input>").attr({ name: `c_model_detail_list[${num}].FRemark`, value: FRemark });
+        //        //加入按鈕
+        //        const save_icon = $("<i></i>").addClass("fa-solid fa-check")
+        //        let btn_save = $("<button></button>").attr("type", "button").addClass("btnSave").attr("style", `border: 2px blue none;`).append(save_icon);
+        //        const edit_icon = $("<i></i>").addClass("fa-solid fa-pen-to-square")
+        //        let btn_edit = $("<button></button>").attr("type", "button").addClass("btnEdit").attr("style", `border: 2px blue none;`).append(edit_icon);
+        //        const delete_icon = $("<i></i>").addClass("fa-solid fa-eraser")
+        //        let btn_delete = $("<button></button>").attr("type", "button").addClass("btnDelete").attr("style", `border: 2px blue none;`).append(delete_icon);
+
+        //        const td2 = $(`<td></td>`).addClass("tdCourseNumber").append(cell2);
+        //        const td3 = $("<td></td>").addClass("tdSchedule").append(cell3);
+        //        const td4 = $("<td></td>").addClass("tdScheduleDetail").append(cell4);
+        //        const td5 = $("<td></td>").addClass("tdTeachingMethod").append(cell5);
+        //        const td6 = $("<td></td>").addClass("tdRemark").append(cell6);
+        //        const td7 = $("<td></td>").addClass("tdSave").attr("style", `display:none;`).append(btn_save);
+        //        const td8 = $("<td></td>").addClass("tdEdit").append(btn_edit);
+        //        const td9 = $("<td></td>").addClass("tdDelete").append(btn_delete);
+        //        const row = $("<tr></tr>").append([cell1, td2, td3, td4, td5, td6, td7, td8, td9]);
+        //        docFrag.append(row);
+        //        num = num + 1;
+        //    })
+        //    //let tbody = document.getElementById("detailtbody");
+        //    $('#detailtbody').html(docFrag);
+        })
+
+        //目前沒用到
+        function checkDetail() {
+            let arrDetail = JSON.parse(sessionStorage.getItem("detailList"));
+
+            const docFrag = $(document.createDocumentFragment());
+            let num = 0;
+            arrDetail.forEach(function (value, index) {
+                num = num + 1;
+                const { _Count, FCourseNumber, FSchedule, FScheduleDetail, FTeachingMethod, FRemark } = value;
+                const cell1 = $(`<td"></td>`).text(_Count).addClass("tdCount");
+                // id="c_model_detail_list[${num}].FCourseNumber" name="c_model_detail_list[${num}].FCourseNumber" value="${FCourseNumber}
+                const cell2 = $("<input></input>").attr({ id: `c_model_detail_list[${num}].FCourseNumber` });
+                const cell3 = $(`<input id="c_model_detail_list[${num}].FSchedule" name="c_model_detail_list[${num}].FSchedule value="${FSchedule}"></input>`);
+                const cell4 = $(`<input id="c_model_detail_list[${num}].FScheduleDetail" name="c_model_detail_list[${num}].FScheduleDetail value="${FScheduleDetail}"></input>`);
+                const cell5 = $(`<input id="c_model_detail_list[${num}].FScheduleDetail" name="c_model_detail_list[${num}].FScheduleDetail value="${FTeachingMethod}"></input>`);
+                const cell6 = $(`<input id="c_model_detail_list[${num}].FScheduleDetail" name="c_model_detail_list[${num}].FScheduleDetail value="${FRemark}">></input>`);
+
+                //.addClass("tdCourseNumber")
+                const td2 = $(`<td"></td>`).append(cell2);
+                const td3 = $(`<td class="tdSchedule"></td>`).append(cell3);
+                const td4 = $(`<td class="tdScheduleDetail"></td>`).append(cell4);
+                const td5 = $(`<td class="tdTeachingMethod"></td>`).append(cell5);
+                const td6 = $(`<td class="tdRemark"></td>`).append(cell6);
+                const row = $("<tr></tr>").append([cell1, td2, td3, td4, td5, td6]);
+                console.log(row)
+                docFrag.append(row);
+            })
+            $("tbody").innerHTML = docFrag;
+        }
+
+    </script>
+}

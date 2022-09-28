@@ -1,0 +1,203 @@
+﻿@*@model IEnumerable<prjCramSchoolSystemAdmin.Models.TCourseModel>*@
+@model prjCramSchoolSystemAdmin.ViewModel.CCourseModelListViewModel
+
+@{
+    ViewData["Title"] = "課程模板";
+}
+@section Styles{
+    <style>
+        th {
+            white-space: nowrap;
+        }
+        .list_distance {
+            padding-top: 50px;
+            padding-bottom: 50px;
+        }
+        .btn_edit {
+            /*border: 2px solid #b7b7b7;
+            background: transparent;
+            color: #111111;*/
+            /*border: 2px solid #b7b7b7;*/
+            display: inline-block;
+            font-size: 14px;
+            font-weight: 600;
+            text-transform: uppercase;
+            padding: 14px 30px;
+            color: #111111;
+            background: transparent;
+            letter-spacing: 2px;
+        }
+        /*.btn_edit{
+            border: 1px solid black;
+        }
+
+        .btn_edit{
+            background-color: #F2F2F2;
+        }*/
+    </style>
+}
+@*<h1>List</h1>
+
+    <p>
+        <a asp-action="Create">Create New</a>
+    </p>*@
+<div class="breadcrumb-option">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-6 col-md-6 col-sm-6">
+                <div class="breadcrumb__text">
+                    <h2>課程模板</h2>
+                </div>
+            </div>
+            <div class="col-lg-6 col-md-6 col-sm-6">
+                <div class="breadcrumb__links">
+                    <a href="@Url.Content("~/")">首頁</a>
+                    <span>課程模板</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Wishlist Section Begin -->
+<section class="wishlist list_distance">
+    <div class="container">
+        <div class="row" style="padding-bottom:60px;">
+            <div class="col-lg-7 col-md-7">
+                <div class="shop__option__search">
+                    <form action="#" style="margin-bottom:5px;">
+                        <select id="CategoryDDL">
+                            <option value="全部">全部</option>
+                            @{
+                                if (Model.CategoryDDL.Length > 0)
+                                {
+
+                                    @foreach (var item in Model.CategoryDDL)
+                                    {
+                                        <option value="@item">@item</option>
+                                    }
+
+                                }
+                            }
+                        </select>
+                        <input id="txtSearch" type="text" placeholder="搜尋">
+                        <button id="btnSearch" type="button"><i class="fa fa-search"></i></button>
+                    </form>
+                    <small style="margin-left: 170px; color: #666666">多關鍵字搜尋請用空白鍵隔開</small>
+                </div>
+            </div>
+            <div class="col-lg-5 col-md-5 col-sm-5">
+                <div class="team__btn" style="border: none;">
+                    <a href="@Url.Content("~/CourseModel/Edit")" class="primary-btn" target="_blank"><i class="fa-solid fa-plus"></i>新增課程模板</a>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="wishlist__cart__table">
+                    <table id="table">
+                        <thead>
+                            <tr>
+                                <th style="width:500px;">
+                                    @Html.DisplayNameFor(model => model.rowName.FName)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.rowName.FCategory)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.rowName.FTotalHours)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.rowName.FTotalNumber)
+                                </th>
+                                <th style="width:200px;">
+                                    @Html.DisplayNameFor(model => model.rowName.FGrade)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.rowName.FSchoolYear)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.rowName.FOriginalPrice)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.rowName.FSpecialOffer)
+                                </th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.course_model)
+                            {
+                                //decimal originalprice = item.FOriginalPrice == 0 ? 0 : (decimal)item.FOriginalPrice;
+                                //decimal specialoffer = item.FSpecialOffer == 0 ? 0 : (decimal)item.FSpecialOffer;
+                                <tr>
+                                    <td style="display:none;">@item.FCourseId</td>
+                                    <td class="cart__price" style="width:500px;">@Html.DisplayFor(modelItem => item.FName)</td>
+                                    <td class="cart__price">@Html.DisplayFor(modelItem => item.FCategory)</td>
+                                    <td class="cart__stock">@Html.DisplayFor(modelItem => item.FTotalHours)</td>
+                                    <td class="cart__stock" >@Html.DisplayFor(modelItem => item.FTotalNumber)</td>
+                                    <td class="cart__stock" style="width:200px;">@Html.DisplayFor(modelItem => item.FGrade)</td>
+                                    <td class="cart__stock">@Html.DisplayFor(modelItem => item.FSchoolYear)</td>
+                                    @*<td class="cart__stock">@originalprice.ToString("###,###,##0")</td>
+                                    <td class="cart__stock">@specialoffer.ToString("###,###,##0")</td>*@
+                                    <td class="cart__stock">@item.txtOriginalPrice</td>
+                                    <td class="cart__stock">@item.txtSpecialOffer</td>
+                                    <td class="cart__btn"><a class="btn_edit" asp-action="Edit" asp-route-id="@item.FCourseId" target="_blank"><i class="fa-solid fa-pen-to-square" style="padding-right: 0px; font-size: 22px;"></i></a></td>
+                                    <td class="cart__close"><button type="button" class="btn_edit" style="padding-left: 0px; border: 2px blue none;"><i class="fa-solid fa-trash" style="font-size:22px;"></i></button></td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+@section Scripts{ 
+    <script>
+        $("#CategoryDDL").change(function () {
+            //let b = $("#CategoryDDL").find("option: selected").text();
+            //console.log(b);
+
+            Search();
+        })
+        $("#btnSearch").click(function () {
+            Search();
+        })
+        $("tbody").on("click", ".cart__close",async function (e) {
+            let coursemodel_id = $(e.target).closest("tr").find("td").eq(0).html();
+            console.log(coursemodel_id);
+            let response = await fetch("@Url.Content("~/CourseModel/Delete")" + `?id=${coursemodel_id}`)
+            Search();
+        })
+        let Search = async function () {
+            let formData = new FormData();
+            formData.append("txtCategory", $("#CategoryDDL").val());
+            formData.append("txtSearch", $("#txtSearch").val());
+            let response = await fetch("@Url.Content("~/CourseModel/searchList")", { method: "POST", body: formData })
+            let data_arr = await response.json();
+            console.log(data_arr);
+            let docFrag = $(document.createDocumentFragment());
+            $.each(data_arr, function (idx, data) {
+                let { fCategory, fCourseId, fName, fGrade, txtOriginalPrice, fSchoolYear, txtSpecialOffer, fTotalHours, fTotalNumber } = data;
+                let cell_id = $("<td></td>").text(fCourseId).attr("style", `display:none;`);
+                let celll = $("<td></td>").addClass("cart__price").text(fName).attr("style", `width:500px;`);
+                let cell2 = $("<td></td>").addClass("cart__price").text(fCategory);
+                let cell3 = $("<td></td>").addClass("cart__stock").text(fTotalHours);
+                let cell4 = $("<td></td>").addClass("cart__stock").text(fTotalNumber);
+                let cell5 = $("<td></td>").addClass("cart__stock").text(fGrade).attr("style", `width:200px;`);
+                let cell6 = $("<td></td>").addClass("cart__stock").text(fSchoolYear);
+                let cell7 = $("<td></td>").addClass("cart__stock").text(txtOriginalPrice);
+                let cell8 = $("<td></td>").addClass("cart__stock").text(txtSpecialOffer);
+                let editicon = $("<i></i>").addClass("fa-solid fa-pen-to-square").attr("style", `padding-right: 0px; font-size:22px;`);
+                let editlink = $("<a></a>").addClass("btn_edit").attr({ "href": "@Url.Content("~/CourseModel/Edit/")" + `?id=${fCourseId}`, "target": "_blank" }).append(editicon);
+                let cell9 = $("<td></td>").addClass("cart__btn").append(editlink);
+                let icon = $("<i></i>").addClass("fa-solid fa-trash").attr("style", `font-size:22px;`);
+                let btn = $("<button></button>").addClass("btn_edit").attr("style", `padding-left: 0px; border: 2px blue none;`).append(icon);
+                let cell10 = $("<td></td>").addClass("cart__close").append(btn)
+                let row = $("<tr></tr>").append([cell_id, celll, cell2, cell3, cell4, cell5, cell6, cell7, cell8, cell9, cell10]);
+                docFrag.append(row);
+            })
+            $("#table>tbody").html(docFrag);
+        }
+    </script>
+}

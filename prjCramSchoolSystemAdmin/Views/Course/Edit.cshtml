@@ -1,0 +1,425 @@
+﻿@model prjCramSchoolSystemAdmin.ViewModel.CCourseViewModel
+
+@{
+    if (Model.course.FName == null)
+    {
+        ViewData["Title"] = "新增課程模板";
+    }
+    else
+    {
+        ViewData["Title"] = Model.course.FName;
+    }
+}
+@section Styles{
+    <style>
+        .coverimg {
+            border: 2px green dashed;
+        }
+
+        #btnSave {
+            position: fixed; /*固定在網頁上不隨卷軸移動，若要隨卷軸移動用absolute*/
+            top: 85%; /*設置垂直位置*/
+            right: 210px; /*設置水平位置，依所放的內容多寡需要自行手動調整*/
+            border: 3px dodgerblue solid;
+            border-radius: 50%;
+        }
+
+        #table_title {
+            color: #111111;
+            font-weight: 600;
+            text-transform: uppercase;
+            /*border-bottom: 1px solid #e1e1e1;*/
+            padding-top: 15px;
+            padding-bottom: 10px;
+            margin-bottom: 10px;
+        }
+
+        .MakeWide {
+            width: 100%;
+        }
+        /*#txtSummary {
+            height: 96px;
+            line-height: 16px;
+            resize: none;
+        }*/
+    </style>
+}
+<!-- Breadcrumb Begin -->
+<div class="breadcrumb-option">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-6 col-md-6 col-sm-6">
+                <div class="breadcrumb__text">
+                    <h2>課程詳情</h2>
+                </div>
+            </div>
+            <div class="col-lg-6 col-md-6 col-sm-6">
+                <div class="breadcrumb__links">
+                    <a href="./index.html">首頁</a>
+                    <a href="./shop.html">開課資訊</a>
+                    <span>課程詳情</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Breadcrumb End -->
+
+<form asp-action="Edit" class="product-details spad form-inline" enctype="multipart/form-data" style="padding-top:50px;">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div class="container" id="product_imgs">
+        <div class="row">
+            <div class="container">
+                <!-- Blog Section Begin -->
+                <div class="row">
+                    <div class="col-lg-8">
+                        <div class="">
+                            @*blog__item*@
+                            @{
+                                string imgPath = Model.courseimg;
+                                if (imgPath == "NullImg.jpg")
+                                {
+                                    imgPath = Url.Content("~/images/NullImg.jpg");
+                                }
+                                <div class="blog__item__pic set-bg">
+                                    <img class="blog__item__pic set-bg uploadImg" src="@imgPath" style="width: 100%; height: 100%; object-fit: cover; " />
+                                </div>
+                            }
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <input type="hidden" asp-for="@Model.course.FEchelonId" id="casestatus" />
+                        <input type="hidden" asp-for="@Model.coverimg" id="txtcoverimg" />
+                        <div class=" checkout__input">
+                            <p>@Html.DisplayNameFor(model => model.course.FName)<span>*</span></p>
+                            <input asp-for="@Model.course.FName" />
+                            <span asp-validation-for="@Model.course.FName" class="text-danger"></span>
+                        </div>
+                        <div class="checkout__input">
+                            <div class="col-lg-12" style="padding-left: 0px; padding-right: 0px;">
+                                <p>@Html.DisplayNameFor(model => model.course.FClassState)<span>*</span></p>
+                                @Html.DropDownListFor(model => model.course.FClassState, (IEnumerable<SelectListItem>)Model.ClassDDL, new { @class = "MakeWide", id = "txtClasseId" })
+                            </div>
+                        </div>
+                        <br />
+                        <br />
+                        <br />
+                        <div class="checkout__input">
+                            <p>課程圖片上傳<span>*</span></p>
+                        </div>
+                        <input type="file" id="uploadPhoto" accept=".png,.jpg" name="uploadPhoto" />
+                    </div>
+                </div>
+            </div>
+            <!-- Blog Section End -->
+            <div class="col-lg-12" style="padding-top:20px;">
+                <div class="row">
+                    <div class="col-lg-3">
+                        <div class="checkout__input">
+                            <p>@Html.DisplayNameFor(model => model.course.FCourseId)<span>*</span></p>
+                            @Html.DropDownListFor(model => model.course.FCourseId, (IEnumerable<SelectListItem>)Model.CourseDDL, new { @class = "MakeWide", id = "txtCourseId" })
+                        </div>
+                    </div>
+                    <div class="col-lg-3">
+                        <div class="checkout__input">
+                            <p>@Html.DisplayNameFor(model => model.course.FCourse.FOriginalPrice)</p>
+                            <input type="text" id="txtOriginalPrice" disabled="disabled" />
+                        </div>
+                    </div>
+                    <div class="col-lg-3">
+                        <div class="checkout__input">
+                            <p>@Html.DisplayNameFor(model => model.course.FCourse.FSpecialOffer)</p>
+                            <input type="text" id="txtSpecialOffer" disabled="disabled" />
+                        </div>
+                    </div>
+                    <div class="col-lg-3">
+                        <div class="checkout__input">
+                            <p>@Html.DisplayNameFor(model => model.course.FDiscountDate)<span>*</span></p>
+                            <input asp-for="@Model.course.FDiscountDate" class="" />
+                            <span asp-validation-for="@Model.course.FDiscountDate" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-3">
+                        <div class="checkout__input">
+                            <p>@Html.DisplayNameFor(model => model.course.FStartTime)<span>*</span></p>
+                            <input id="dateStartTime" asp-for="@Model.course.FStartTime" class="" />
+                            <span asp-validation-for="@Model.course.FStartTime" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-lg-3">
+                        <div class="checkout__input">
+                            <p>@Html.DisplayNameFor(model => model.course.FEndTime)<span>*</span></p>
+                            <input id="dateEndTime" asp-for="@Model.course.FEndTime" class="" />
+                            <span asp-validation-for="@Model.course.FEndTime" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-lg-3">
+                        <div class="checkout__input">
+                            <p>@Html.DisplayNameFor(model => model.course.FCourse.FGrade)</p>
+                            <input type="text" id="txtGrade" disabled="disabled" />
+                        </div>
+                    </div>
+                    <div class="col-lg-3">
+                        <div class="checkout__input">
+                            <p>@Html.DisplayNameFor(model => model.course.FCourse.FSchoolYear)</p>
+                            <input type="text" id="txtSchoolYear" disabled="disabled" />
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-3">
+                        <div class="checkout__input">
+                            <p>@Html.DisplayNameFor(model => model.course.FCourse.FTotalHours)</p>
+                            <input type="text" id="txtTotalHours" disabled="disabled" />
+                        </div>
+                    </div>
+                    <div class="col-lg-3">
+                        <div class="checkout__input">
+                            <p>@Html.DisplayNameFor(model => model.course.FCourse.FTotalNumber)</p>
+                            <input type="text" id="txtTotalNumber" disabled="disabled" />
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="checkout__input">
+                            <p>@Html.DisplayNameFor(model => model.course.FTime)<span>*</span></p>
+                            <input asp-for="@Model.course.FTime" />
+                            <span asp-validation-for="@Model.course.FTime" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-3">
+                        <div class="checkout__input">
+                            <p>@Html.DisplayNameFor(model => model.course.FTeacher)<span>*</span></p>
+                            <input asp-for="@Model.course.FTeacher" />
+                            <span asp-validation-for="@Model.course.FTeacher" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-lg-3">
+                        <div class="checkout__input">
+                            <p>@Html.DisplayNameFor(model => model.course.FBasicPeople)<span>*</span></p>
+                            <input asp-for="@Model.course.FBasicPeople" />
+                            <span asp-validation-for="@Model.course.FBasicPeople" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-lg-3">
+                        <div class="checkout__input">
+                            <p>@Html.DisplayNameFor(model => model.course.FLimitPeople)<span>*</span></p>
+                            <input asp-for="@Model.course.FLimitPeople" />
+                            <span asp-validation-for="@Model.course.FLimitPeople" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-lg-3">
+                        <div class="checkout__input">
+                            <p>@Html.DisplayNameFor(model => model.course.FClassRoom)<span>*</span></p>
+                            <input asp-for="@Model.course.FClassRoom" />
+                            <span asp-validation-for="@Model.course.FClassRoom" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12">
+                        @*<div class="checkout__input">*@
+                        <p>@Html.DisplayNameFor(model => model.course.FCourse.FSummary)</p>
+                        @*<input type="text" id="txtSummary" disabled="disabled" />*@
+                        <textarea id="txtSummary" disabled="disabled" style="height: 96px; width: 1140px; line-height: 16px; resize: none;"></textarea>
+                        @*</div>*@
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-12" style="padding-bottom: 20px;">
+                <h6 id="table_title">課程細項</h6>
+                <table class="table table-hover" style="border-style: none;">
+                    <thead>
+                        <tr>
+                            <th scope="col">課堂數</th>
+                            <th scope="col">課堂進度(頁數)</th>
+                            <th scope="col">課程進度說明</th>
+                            <th scope="col">授課方式</th>
+                            <th scope="col">說明</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbody_Detail">
+                        <tr>
+                            <th scope="row"></th>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="form-group">
+                @*<input type="button" id="test" value="test" class="primary-btn" style="border:2px blue none;" />*@
+                @*<input type="submit" id="submit" value="Save" class="primary-btn" style="border:2px blue none;" />*@
+                <button class="btn btn-default" type="submit" id="btnSave">
+                    <i class="fa-regular fa-floppy-disk" style="padding:5px; font-size:35px;"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+</form>
+
+@*<div>
+        <a asp-action="Index">Back to List</a>
+    </div>*@
+
+@section Scripts {
+    @*@{await Html.RenderPartialAsync("_ValidationScriptsPartial");}*@
+    <script>
+        let TimeFn = null;
+        getPeopleNumber();
+    LoadCourseId();
+
+    //點擊shift鍵
+    $(document).keyup(function (e) {
+        if (e.keyCode == 16) {
+            $("#course_FName").val("H3156");
+            $("#course_FDiscountDate").val("2022-05-25");
+            $("#dateStartTime").val("2022-06-06");
+            $("#dateEndTime").val("2022-06-20");
+            $("#course_FTime").val("周一下午6:00~7:00");
+            $("#course_FTeacher").val("柳吟老師");
+            $("#course_FBasicPeople").val("25");
+            $("#course_FLimitPeople").val("50");
+            $("#course_FClassRoom").val("102");
+        }
+    })
+
+        //一開始 欄位預設值輸入
+        function getPeopleNumber() {
+            let status = $("#casestatus").val();
+            //console.log(status);
+            //新增課程
+            if (status == "") {
+                $("#txtBasicPeople").val(0);
+                $("#txtLimitPeople").val(0);
+            }
+            //封面圖
+            if ($("#txtcoverimg").val() != "") {
+                let t = "#" + $("#txtcoverimg").val();
+                let cover_picture = $(".product__details__big__img").eq(0).children(".divImg").children("img");
+                console.log(cover_picture)
+                let targetdiv = $(t);
+                console.log(targetdiv)
+
+                $(t).closest(".divImg").html(cover_picture);
+                $(".product__details__big__img").eq(0).children(".divImg").html(targetdiv);
+                $(".coverimg").eq(0).removeClass("coverimg");
+                $(".product__details__big__img").eq(0).children(".divImg").children("img").addClass("coverimg");
+            }
+        }
+
+        $("#dateStartTime").change(function () {
+            $("#dateEndTime").attr("min", $("#dateStartTime").val());
+        })
+
+        $("#dateEndTime").change(function () {
+            $("#dateStartTime").attr("max", $("#dateEndTime").val());
+        })
+
+        //設定為封面圖
+        $("body").on("dblclick", ".img_operate", function (e) {
+            clearTimeout(TimeFn);
+            //反過來寫 不行
+            $(".coverimg").eq(0).removeClass("coverimg");
+            $(e.target).addClass("coverimg");
+
+            let coverimg_id = $(".coverimg").eq(0).attr("id");
+            $("#txtcoverimg").val(coverimg_id);
+        })
+
+        //交換圖片div
+        $("body").on("click", ".img_operate",function (e) {
+            clearTimeout(TimeFn);
+            TimeFn = setTimeout(function () {
+                //找出大圖
+                let cover_picture = $(".product__details__big__img").eq(0).children(".divImg").html();
+                //找出點擊圖片
+                let current = e.currentTarget;
+                let currentdiv = $(e.currentTarget).children(".divImg").html();
+
+                //交換
+                $(".product__details__big__img").eq(0).children(".divImg").html(currentdiv);
+                $(e.currentTarget).children(".divImg").html(cover_picture);
+            }, 300);
+        })
+
+        //課程id下拉(原本) ajax getModel資料
+        async function LoadCourseId() {
+            let select = $("#txtCourseId").val();
+            let response = await fetch("@Url.Content("~/Course/getModelData")" + `?fCourseId=${select}`);
+            let arr = await response.json();
+            $("#txtTotalHours").val(arr.fTotalHours);
+            $("#txtTotalNumber").val(arr.fTotalNumber);
+            $("#txtGrade").val(arr.fGrade);
+            $("#txtSchoolYear").val(arr.fSchoolYear);
+            $("#txtSummary").val(arr.fSummary);
+            $("#txtOriginalPrice").val(arr.fOriginalPrice);
+            $("#txtSpecialOffer").val(arr.fSpecialOffer);
+            console.log(arr.fDetail_List);
+            if (arr.fDetail_List.length > 0)
+                get_tableDetail(arr.fDetail_List);
+            else {
+                let docFrag = $(document.createDocumentFragment());
+                $("#tbody_Detail").html(docFrag);
+            }
+        }
+
+        let get_tableDetail = function (arr) {
+            let docFrag = $(document.createDocumentFragment());
+            $.each(arr, function (idx, data) {
+                let { fCourseNumber, fSchedule, fScheduleDetail, fTeachingMethod, fRemark } = data;
+                //放進列表
+                const celll = $("<th></th>").text(fCourseNumber).attr("scope", "row");
+                const cell2 = $("<td></td>").text(fSchedule);
+                const cell3 = $("<td></td>").text(fScheduleDetail);
+                const cell4 = $("<td></td>").text(fTeachingMethod);
+                const cell5 = $("<td></td>").text(fRemark);
+
+                const row = $("<tr></tr>").append([celll, cell2, cell3, cell4, cell5]);
+                docFrag.append(row);
+            })
+            $("#tbody_Detail").html(docFrag);
+        }
+
+        //課程id下拉(改變) ajax getModel資料
+        $("#txtCourseId").change(async function () {
+            let select = $("#txtCourseId").val();
+            console.log(select);
+            let response = await fetch("@Url.Content("~/Course/getModelData")" + `?fCourseId=${select}`);
+            let arr = await response.json();
+            console.log(arr);
+            $("#txtTotalHours").val(arr.fTotalHours);
+            $("#txtTotalNumber").val(arr.fTotalNumber);
+            $("#txtGrade").val(arr.fGrade);
+            $("#txtSchoolYear").val(arr.fSchoolYear);
+            $("#txtSummary").val(arr.fSummary);
+            $("#txtOriginalPrice").val(arr.fOriginalPrice);
+            $("#txtSpecialOffer").val(arr.fSpecialOffer);
+            if (arr.fDetail_List.length > 0)
+                get_tableDetail(arr.fDetail_List);
+            else {
+                let docFrag = $(document.createDocumentFragment());
+                $("#tbody_Detail").html(docFrag);
+            }
+        })
+
+        $("#product_imgs").on("change", "#uploadPhoto", function (e) {
+            console.log("imgtest");
+            let photo = e.target.files;
+            for (let i = 0; i < photo.length; i++) {
+                const reader = new FileReader();
+                reader.addEventListener("load", function (evt) {
+                    //console.log(evt.target.result);
+                    $(".uploadImg").eq(i).attr("src", evt.target.result);
+                    //console.log($(".uploadImg").eq(i))
+                })
+                reader.readAsDataURL(photo[i])
+            }
+        })
+    </script>
+}

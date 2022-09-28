@@ -1,0 +1,131 @@
+﻿@page
+@model RegisterModel
+@{
+    ViewData["Title"] = "註冊";
+}
+
+<!-- Breadcrumb Begin -->
+<div class="breadcrumb-option">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-6 col-md-6 col-sm-6">
+                <div class="breadcrumb__text">
+                    <h2>@ViewData["Title"]</h2>
+                    <h4>建立新帳號</h4>
+                </div>
+            </div>
+            <div class="col-lg-6 col-md-6 col-sm-6">
+                <div class="breadcrumb__links">
+                    <a asp-area="" asp-controller="Home" asp-action="Index">首頁</a>
+                    <span>@ViewData["Title"]</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Breadcrumb End -->
+<!-- About Section Begin -->
+<hr />
+<section class="spad">
+    <div class="container">
+        <form asp-route-returnUrl="@Model.ReturnUrl" method="post" enctype="multipart/form-data">
+            <div asp-validation-summary="All" class="text-danger"></div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label asp-for="Input.ThumbnailName"></label>
+                        <div class="text-center">
+                            <img class="img-thumbnail rounded" style="max-height:200px" id="thumbnailImg" src="@Url.Content(Model.FolderPath)@Model.ThumbnailPath" alt="無此圖片" height=300 />
+                            <input class="form-control" type="file" id="thumbnail" name="thumbnail" accept="image/*">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="row">
+                        <div class="form-group col-lg-6">
+                            <label asp-for="Input.UserRole"></label>
+                        <div class="input__model">
+                                <select class="form-control" asp-for="Input.UserRole" asp-items="Model.UserRoles">
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group col-lg-6">
+                            <label asp-for="Input.Gender"></label>
+                            <div class="input__model">
+                                <select asp-for="Input.Gender" asp-items="Model.Genders" class="form-control"></select>
+                            </div>
+                            <span asp-validation-for="Input.Gender" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Input.Username"></label>
+                        <input asp-for="Input.Username" class="form-control" />
+                        <span asp-validation-for="Input.Username" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Input.Email"></label>
+                        <input asp-for="Input.Email" class="form-control" />
+                        <span asp-validation-for="Input.Email" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label asp-for="Input.Password"></label>
+                        <input asp-for="Input.Password" class="form-control" />
+                        <span asp-validation-for="Input.Password" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label asp-for="Input.ConfirmPassword"></label>
+                        <input asp-for="Input.ConfirmPassword" class="form-control" />
+                        <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label asp-for="Input.LastName"></label>
+                        <input asp-for="Input.LastName" class="form-control" />
+                        <span asp-validation-for="Input.LastName" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label asp-for="Input.FirstName"></label>
+                        <input asp-for="Input.FirstName" class="form-control" />
+                        <span asp-validation-for="Input.FirstName" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary">註冊</button>
+        </form>
+    </div>
+</section>
+
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        // 即時呈現圖片載入
+        const thumbnail = document.querySelector('#thumbnail');
+        const thumbPreview = document.querySelector('#thumbnailImg');
+        // 圖片改變時
+        thumbnail.addEventListener('change', () => {
+            const file = thumbnail.files[0];
+            // 建立FileReader物件
+            const reader = new FileReader();
+            // 圖讀完後
+            reader.addEventListener('load', (evt) => {
+                //console.log(evt.target.result);
+                thumbPreview.src = evt.target.result;
+            })
+            // 讀取圖片
+            reader.readAsDataURL(file);
+        });
+    </script>
+}

@@ -1,0 +1,176 @@
+﻿@*@model IEnumerable<prjCramSchoolSystemAdmin.Models.TCourseInformation>*@
+@model prjCramSchoolSystemAdmin.ViewModel.CCourseListViewModel
+
+@{
+    ViewData["Title"] = "開課資訊";
+}
+@section Styles{
+    <style>
+        .list_distance {
+            padding-top: 50px;
+            padding-bottom: 50px;
+        }
+    </style>
+}
+@*<h1>List</h1>
+
+    <p>
+        <a asp-action="Create">Create New</a>
+    </p>*@
+<!-- Breadcrumb Begin -->
+<div class="breadcrumb-option">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-6 col-md-6 col-sm-6">
+                <div class="breadcrumb__text">
+                    <h2>開課資訊</h2>
+                </div>
+            </div>
+            <div class="col-lg-6 col-md-6 col-sm-6">
+                <div class="breadcrumb__links">
+                    <a href="@Url.Content("~/")">首頁</a>
+                    <span>開課資訊</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Breadcrumb End -->
+<div class="container list_distance">
+    <div class="row" style="padding-bottom:60px;">
+        <div class="col-lg-7 col-md-7">
+            <div class="shop__option__search">
+                <form action="#" style="margin-bottom:5px;">
+                    <input id="txtSearch" type="text" placeholder="搜尋">
+                    <button id="btnSearch" type="button"><i class="fa fa-search"></i></button>
+                </form>
+                <small style="margin-left: 0px; color: #666666">多關鍵字搜尋請用空白鍵隔開</small>
+            </div>
+        </div>
+        <div class="col-lg-5 col-md-5 col-sm-5">
+            <div class="team__btn" style="border: none;">
+                <a href="@Url.Content("~/Course/Edit")" class="primary-btn" target="_blank"><i class="fa-solid fa-plus"></i>新增開課資訊</a>
+            </div>
+        </div>
+    </div>
+    <table class="table" id="tabCourse">
+        <thead>
+            <tr>
+                <th scope="col" style="display:none;">
+                    @Html.DisplayNameFor(model => model.rowName.FEchelonId)
+                </th>
+                <th scope="col">
+                    @Html.DisplayNameFor(model => model.rowName.FName)
+                </th>
+                <th scope="col">
+                    @Html.DisplayNameFor(model => model.rowName.FCourseId)
+                </th>
+                <th scope="col">
+                    @Html.DisplayNameFor(model => model.rowName.FStartTime)
+                </th>
+                <th scope="col">
+                    @Html.DisplayNameFor(model => model.rowName.FEndTime)
+                </th>
+                <th scope="col">
+                    @Html.DisplayNameFor(model => model.rowName.FClassState)
+                </th>
+                <th scope="col">
+                    @Html.DisplayNameFor(model => model.rowName.FTeacher)
+                </th>
+                <th scope="col">
+                    價錢
+                </th>
+                <th></th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody id="tbody_Course">
+            @{
+                int i = 0;
+                foreach (var item in Model.course)
+                {
+                    <tr>
+                        <th scope="row" style="display:none;">
+                            @Html.DisplayFor(modelItem => item.FEchelonId)
+                        </th>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.FName)
+                        </td>
+                        <td>
+                            @*@Html.DisplayFor(modelItem => item.FCourseId)*@
+                            @Html.DisplayFor(modelItem => item.FCourse_FName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.txtStartTime)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.txtEndTime)
+                        </td>
+                        <td>
+                            @*@Html.DisplayFor(modelItem => item.FClassState)*@
+                            @Html.DisplayFor(modelItem => item.txtClassState)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.FTeacher)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.txtPrice)
+                        </td>
+                        <td>
+                            <!--@Html.ActionLink("Detail", "Edit", new { id = item.FEchelonId })--> @*|*@
+                            <a class="btn_edit" asp-action="Edit" asp-route-id="@item.FEchelonId" target="_blank"><i class="fa-solid fa-pen-to-square" style="padding-right: 0px; font-size: 22px; color: black;"></i></a>
+                        </td>
+                        <td>
+                            <button type="button" class="btnClose" style="padding-left: 0px; border: 2px blue none;"><i class="fa-solid fa-trash" style="font-size: 22px; color: black;"></i></button>
+                        </td>
+                    </tr>
+                    i++;
+                }
+            }
+        </tbody>
+    </table>
+</div>
+@section Scripts{
+    <script>
+        $("#btnSearch").click(function () {
+            Search();
+         })
+        let Search = async function () {
+            let formData = new FormData();
+            formData.append("txtSearch", $("#txtSearch").val());
+            let response = await fetch("@Url.Content("~/Course/searchList")", { method: "POST", body: formData })
+            let data_arr = await response.json();
+            console.log(data_arr);
+            let docFrag = $(document.createDocumentFragment());
+            $.each(data_arr, function (idx, data) {
+                let { fEchelonId, fName, fCourse_FName, txtStartTime, txtEndTime, txtClassState, fTeacher, txtPrice } = data;
+                const celll = $("<th></th>").text(fEchelonId).attr({ "scope": "row", "style": "display:none;" });
+                const cell2 = $("<td></td>").text(fName);
+                const cell3 = $("<td></td>").text(fCourse_FName);
+                const cell4 = $("<td></td>").text(txtStartTime);
+                const cell5 = $("<td></td>").text(txtEndTime);
+                const cell6 = $("<td></td>").text(txtClassState);
+                const cell7 = $("<td></td>").text(fTeacher);
+                const cell8 = $("<td></td>").text(txtPrice);
+
+                let editicon = $("<i></i>").addClass("fa-solid fa-pen-to-square").attr("style", `padding-right: 0px; font-size: 22px; color: black;`);
+                let editlink = $("<a></a>").attr({ "href": "@Url.Content("~/Course/Edit/")" + `?id=${fEchelonId}`, "target": "_blank" }).append(editicon);
+                let cell9 = $("<td></td>").append(editlink);
+                let icon = $("<i></i>").addClass("fa-solid fa-trash").attr("style", `font-size: 22px; color: black;`);
+                let btn = $("<button></button>").attr("style", `padding-left: 0px; border: 2px blue none;`).append(icon);
+                let cell10 = $("<td></td>").append(btn)
+
+                const row = $("<tr></tr>").append([celll, cell2, cell3, cell4, cell5, cell6, cell7, cell8, cell9, cell10]);
+                docFrag.append(row);
+            })
+            $("#tbody_Course").html(docFrag);
+        }
+        $("#tabCourse").on("click", ".btnClose", async function (e) {
+            let course_id = $(e.target).closest("td").closest("tr").find("th").eq(0).text();
+            course_id = course_id.replace(/^\s*|\s*$/g, "");
+            console.log(course_id);
+            let response = await fetch("@Url.Content("~/Course/Delete")" + `?id=${course_id}`)
+            Search();
+        })
+    </script>
+}
